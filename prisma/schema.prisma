@@ -53,3 +53,26 @@ model products {
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
   categories       categories         @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
+
+model invoices{
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  total            String             @db.VarChar(50)
+  discount         String             @db.VarChar(50)
+  vat              String             @db.VarChar(50)
+  payable          String             @db.VarChar(50)
+  user_id          BigInt             @db.UnsignedBigInt
+  customer_id      BigInt             @db.UnsignedBigInt
+  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  updated_at       DateTime           @default(now()) @db.Timestamp(0)
+}
+
+model invoice_products{
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  invoice_id       BigInt             @db.UnsignedBigInt
+  product_id       BigInt             @db.UnsignedBigInt
+  user_id          BigInt             @db.UnsignedBigInt
+  qty              String             @db.VarChar(50)
+  sale_price       String             @db.VarChar(50)
+  created_at       DateTime           @default(now()) @db.Timestamp(0)
+  updated_at       DateTime           @default(now()) @db.Timestamp(0)
+}
