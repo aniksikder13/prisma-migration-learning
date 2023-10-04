@@ -20,6 +20,11 @@ model users{
   otp              String             @db.VarChar(6)
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  customers        customers[]
+  categories       categories[]
+  products         products[]
+  invoices         invoices[]
+  invoice_products invoice_products[]
 }
 
 model customers{
@@ -30,6 +35,8 @@ model customers{
   user_id          BigInt             @db.UnsignedBigInt
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  invoices invoices[]
+  users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
 model categories {
@@ -39,6 +46,7 @@ model categories {
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
   products products[]
+  users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
 model products {
@@ -52,6 +60,7 @@ model products {
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
   categories       categories         @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
 model invoices{
@@ -64,6 +73,7 @@ model invoices{
   customer_id      BigInt             @db.UnsignedBigInt
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
 model invoice_products{
@@ -75,4 +85,5 @@ model invoice_products{
   sale_price       String             @db.VarChar(50)
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
