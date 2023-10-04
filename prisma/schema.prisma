@@ -35,7 +35,7 @@ model customers{
   user_id          BigInt             @db.UnsignedBigInt
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
-  invoices invoices[]
+  invoices         invoices[]
   users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
@@ -45,7 +45,7 @@ model categories {
   user_id          BigInt             @db.UnsignedBigInt
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
-  products products[]
+  products         products[]
   users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
@@ -59,6 +59,7 @@ model products {
   user_id          BigInt             @db.UnsignedBigInt
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  invoice_products invoice_products?
   categories       categories         @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
   users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
@@ -73,17 +74,21 @@ model invoices{
   customer_id      BigInt             @db.UnsignedBigInt
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
+  invoice_products invoice_products[]
   users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  customers        customers          @relation(fields: [customer_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
 model invoice_products{
   id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
   invoice_id       BigInt             @db.UnsignedBigInt
-  product_id       BigInt             @db.UnsignedBigInt
+  product_id       BigInt             @db.UnsignedBigInt @unique
   user_id          BigInt             @db.UnsignedBigInt
   qty              String             @db.VarChar(50)
   sale_price       String             @db.VarChar(50)
   created_at       DateTime           @default(now()) @db.Timestamp(0)
   updated_at       DateTime           @default(now()) @db.Timestamp(0)
   users            users              @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  products         products           @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  invoices         invoices           @relation(fields: [invoice_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
